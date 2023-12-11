@@ -18,7 +18,7 @@ public:
         GenerateStickers();
         GeneratePacks();
     }
-
+    
     void GenerateStickers() {
     for (int i = 0; i < totalAlbums; ++i) {
         for (int j = 1; j <= stickersPerAlbum; ++j) {
@@ -67,7 +67,7 @@ public:
 
     void ShowAlbum() {
         std::cout << "Album:" << std::endl;
-        for (int i = 1; i <= totalStickers; ++i) {
+        for (int i = 1; i <= 25; ++i) {
             if (album.count(i) > 0) {
                 std::cout << i << " ";
             }
@@ -87,7 +87,7 @@ public:
 
     void ShowMissingStickers() {
         std::cout << "Cromos faltantes:" << std::endl;
-        for (int i = 1; i <= totalStickers; ++i) {
+        for (int i = 1; i <= 25; ++i) {
             if (album.count(i) == 0) {
                 std::cout << i << " ";
             }
@@ -96,7 +96,7 @@ public:
     }
 
     void Finish() {
-        std::cout << "�lbum completado!" << std::endl;
+        std::cout << "Album completado!" << std::endl;
         ShowDuplicates();
     }
 
