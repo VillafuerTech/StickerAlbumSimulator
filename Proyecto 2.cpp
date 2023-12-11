@@ -11,23 +11,25 @@ random_device rd;
 mt19937 g(rd());
 class Album {
 public:
-    Album(int numAlbums) {
+   Album(int numAlbums) {
         totalAlbums = numAlbums;
+        totalPacks = totalAlbums * 5; // Initialize totalPacks here
         totalStickers = numAlbums * stickersPerAlbum;
         GenerateStickers();
         GeneratePacks();
     }
 
     void GenerateStickers() {
-        for (int i = 1; i <= totalStickers; ++i) {
-            stickers.push_back(i);
+    for (int i = 0; i < totalAlbums; ++i) {
+        for (int j = 1; j <= stickersPerAlbum; ++j) {
+            stickers.push_back(j);
         }
-    std::random_device rd;
-    std::mt19937 g(rd());
-
-    std::shuffle(stickers.begin(), stickers.end(), g);
     }
-
+    std::random_device rd;
+    std::mt19937 g(time(0));
+    std::shuffle(stickers.begin(), stickers.end(), g);
+}
+    
     void GeneratePacks() {
         for (int i = 0; i < totalPacks; ++i) {
             std::vector<int> pack;
@@ -40,7 +42,7 @@ public:
 
     void OpenPack(int packNumber) {
         if (packNumber < 1 || packNumber > totalPacks) {
-            std::cout << "N�mero de sobre no v�lido." << std::endl;
+            std::cout << "Numero de sobre no valido." << std::endl;
             return;
         }
 
@@ -64,7 +66,7 @@ public:
     }
 
     void ShowAlbum() {
-        std::cout << "�lbum:" << std::endl;
+        std::cout << "Album:" << std::endl;
         for (int i = 1; i <= totalStickers; ++i) {
             if (album.count(i) > 0) {
                 std::cout << i << " ";
@@ -98,9 +100,12 @@ public:
         ShowDuplicates();
     }
 
+    int getTotalPacks(){
+        return totalPacks;
+    }
 private:
     static const int stickersPerAlbum = 25;
-    static const int totalPacks = 50;
+    int totalPacks = totalAlbums*5;
     static const int stickersPerPack = 5;
 
     int totalAlbums;
@@ -113,7 +118,7 @@ private:
 
 int main() {
     int numAlbums;
-    std::cout << "Ingrese la cantidad de �lbumes a producir: ";
+    std::cout << "Ingrese la cantidad de Albumes a producir: ";
     std::cin >> numAlbums;
 
     Album album(numAlbums);
@@ -133,7 +138,7 @@ int main() {
 
         switch (option) {
         case 1:
-            std::cout << "Sobres disponibles: " << 50 << std::endl;
+            std::cout << "Sobres disponibles: " << album.getTotalPacks() << std::endl;
             break;
         case 2:
             int packNumber;
