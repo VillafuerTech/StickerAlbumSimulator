@@ -7,7 +7,10 @@
 #include <algorithm>
 #include <fstream>
 
-
+bool fileExists(const std::string& filename) {
+    std::ifstream file(filename);
+    return file.good();
+}
 class Album {
 public:
     Album(int numAlbums) {
@@ -17,6 +20,102 @@ public:
         GenerateStickers();
         GeneratePacks();
     }
+
+    void BackupDuplicates() const {
+    std::ofstream file("duplicates.txt");
+    if (file.is_open()) {
+        // Guarda los cromos repetidos
+        for (const auto& pair : album) {
+            if (pair.second > 1) { // Si el cromo está más de una vez en el álbum, es un duplicado
+                file << pair.first << " " << pair.second << std::endl;
+            }
+        }
+    } else {
+        std::cerr << "Error al abrir el archivo de duplicados." << std::endl;
+    }
+}
+
+    void BackupAlbum() const {
+    std::ofstream file("album.txt");
+    if (file.is_open()) {
+        // Guarda los cromos en el álbum
+        for (int i = 1; i <= 25; ++i) {
+            if (album.count(i) > 0) {
+                file << i << " ";
+            }
+        }
+        file << std::endl;
+    } else {
+        std::cerr << "Error al abrir el archivo del álbum." << std::endl;
+    }
+}
+    
+     void BackupData() const {
+        std::ofstream file("backup.txt");
+        if (file.is_open()) {
+            // Guarda el estado del álbum
+            file << totalAlbums << " " << totalPacks << " " << totalStickers << std::endl;
+
+            // Guarda los stickers
+            for (int sticker : stickers) {
+                file << sticker << " ";
+            }
+            file << std::endl;
+
+            // Guarda el estado de los packs
+            for (const auto& pack : packs) {
+                file << pack.second << " ";
+            }
+            file << std::endl;
+        } else {
+            std::cerr << "Error al abrir el archivo de respaldo." << std::endl;
+        }
+    }
+
+    void LoadData() {
+    std::ifstream file("backup.txt");
+    if (file.is_open()) {
+        // Carga el estado del álbum
+        file >> totalAlbums >> totalPacks >> totalStickers;
+
+        // Carga los stickers
+        stickers.resize(totalStickers);
+        for (int& sticker : stickers) {
+            file >> sticker;
+        }
+
+        // Carga el estado de los packs
+        packs.resize(totalPacks);
+        for (auto& pack : packs) {
+            file >> pack.second;
+        }
+    } else {
+        std::cerr << "No se encontró un archivo de respaldo. Iniciando con datos predeterminados." << std::endl;
+    }
+
+    std::ifstream albumFile("album.txt");
+    if (albumFile.is_open()) {
+        // Carga los cromos en el álbum
+        int sticker;
+        while (albumFile >> sticker) {
+            album.insert({sticker, true}); // Insert a pair into the map
+        }
+    } else {
+        std::cerr << "Error al abrir el archivo del álbum." << std::endl;
+    }
+    
+    std::ifstream duplicatesFile("duplicates.txt");
+    if (duplicatesFile.is_open()) {
+        // Carga los cromos duplicados
+        int sticker, count;
+        while (duplicatesFile >> sticker >> count) {
+            album[sticker] = count; // Establece el conteo de este cromo en el álbum
+        }
+    } else {
+        std::cerr << "Error al abrir el archivo de duplicados." << std::endl;
+    }
+
+}
 
     void GenerateStickers() {
         for (int i = 0; i < totalAlbums; ++i) {
@@ -117,7 +216,7 @@ public:
     }
 
     void Finish() const {
-        std::cout << "Album completado!" << std::endl;
+        std::cout << "Programa terminado!" << std::endl;
         ShowDuplicates();
     }
 
@@ -134,6 +233,7 @@ public:
     return true; // If all stickers are present, the album is complete
 }
 
+
 private:
     static const int stickersPerAlbum = 25;
     int totalPacks = totalAlbums * packsPerAlbum;
@@ -149,12 +249,33 @@ private:
 };
 
 int main() {
+
     int numAlbums;
+    Album album(1);
+    if(fileExists("backup.txt") && fileExists("album.txt") && fileExists("duplicates.txt")) {
+    char option;
+    do {
+        std::cout << "Se ha encontrado un archivo de respaldo. ¿Desea cargarlo? (s/n): ";
+        std::cin >> option;
+    } while (option != 's' && option != 'n');
+
+    if (option == 's') {
+        album.LoadData();
+    } else {
+        remove("backup.txt"); // Elimina el archivo de respaldo
+        remove("album.txt"); // Elimina el archivo del álbum
+
+        std::cout << "Ingrese la cantidad de Albumes a producir: ";
+        std::cin >> numAlbums;
+
+        album = Album(numAlbums); // Reemplaza el álbum existente con uno nuevo
+    }
+} else {
     std::cout << "Ingrese la cantidad de Albumes a producir: ";
     std::cin >> numAlbums;
 
-    Album album(numAlbums);
-
+    album = Album(numAlbums); // Reemplaza el álbum existente con uno nuevo
+}
     int option;
     do {
         std::cout << "\nOpciones:\n";
@@ -213,6 +334,9 @@ int main() {
         album.ShowRemainingPacks();
         break; // Termina el bucle, terminando así el programa
     }
+    album.BackupData();
+    album.BackupAlbum();
+    album.BackupDuplicates();
     } while (option != 8);
 
     return 0;
