@@ -1,12 +1,11 @@
-This C++ code is a part of a larger program that simulates the management of a sticker album. The user is asked to input the number of albums to produce, and an Album object is created with that number.
+It's a program that simulates the process of collecting stickers and organizing them into albums. The code includes a utility function to check if a file exists and a class definition for an `Album`.
 
-The main part of the code is a do-while loop that presents a menu of options to the user and performs different actions based on the user's choice. The options are:
+The `fileExists` function takes a filename as a string and attempts to open it as an input file stream. If the file can be opened successfully, the function returns true, indicating that the file exists. Otherwise, it returns false.
 
-Display the number of available packs. This is hardcoded to 50 in the code.
-Open a pack. The user is asked to input the number of the pack to open, and the OpenPack method of the Album object is called with that number.
-Show the album. The ShowAlbum method of the Album object is called.
-Show duplicate stickers. The ShowDuplicates method of the Album object is called.
-Show missing stickers. The ShowMissingStickers method of the Album object is called.
-Finish the album. The Finish method of the Album object is called.
-Restart the album. The Album object is reinitialized with the original number of albums.
-If the user inputs a number that does not correspond to any of the options, a message is displayed indicating that the option is not valid. The loop continues until the user chooses to finish the album or restart it.
+The `Album` class represents a collection of stickers organized into albums. The class has a constructor that takes the number of albums as an argument and calculates the total number of packs and stickers based on this number. It also calls two methods, `GenerateStickers` and `GeneratePacks`, which are not defined in the provided code but presumably generate the stickers and packs for the albums.
+
+The `BackupDuplicates` method of the `Album` class writes the duplicate stickers in the album to a file named "duplicates.txt". It iterates over the `album` map (which is not shown in the provided code but presumably maps sticker numbers to their counts in the album) and writes the sticker number and count to the file for each sticker that appears more than once in the album.
+
+The `BackupAlbum` method of the `Album` class writes the stickers in the album to a file named "album.txt". It iterates over the numbers from 1 to 25 and writes each number to the file if it appears in the `album` map. This suggests that there are 25 possible stickers that can be collected.
+
+Note that both `BackupDuplicates` and `BackupAlbum` methods check if the file can be opened successfully before attempting to write to it. If the file cannot be opened, an error message is printed to the standard error stream.
