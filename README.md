@@ -1,11 +1,95 @@
-It's a program that simulates the process of collecting stickers and organizing them into albums. The code includes a utility function to check if a file exists and a class definition for an `Album`.
+Sticker Album Simulator
 
-The `fileExists` function takes a filename as a string and attempts to open it as an input file stream. If the file can be opened successfully, the function returns true, indicating that the file exists. Otherwise, it returns false.
+This program simulates the process of collecting and organizing stickers into albums. It offers various functionalities such as generating stickers, opening packs, managing duplicates, and backing up the album’s state. The program is interactive and allows users to track their sticker collection in real-time.
 
-The `Album` class represents a collection of stickers organized into albums. The class has a constructor that takes the number of albums as an argument and calculates the total number of packs and stickers based on this number. It also calls two methods, `GenerateStickers` and `GeneratePacks`, which are not defined in the provided code but presumably generate the stickers and packs for the albums.
+Features
+	1.	Album Generation:
+	•	Create albums with a specified number of stickers and packs.
+	•	Randomly generate stickers and distribute them across packs.
+	2.	Pack Management:
+	•	Open packs to reveal their contents.
+	•	Track opened and remaining packs.
+	3.	Album Tracking:
+	•	Display stickers in the album.
+	•	Identify missing stickers.
+	•	Detect duplicate stickers.
+	4.	Backup and Restore:
+	•	Save the current state of the album, duplicates, and packs to files.
+	•	Restore data from previous backups.
+	5.	Completion Check:
+	•	Automatically detect when the album is complete.
+	6.	Interactive Menu:
+	•	Perform operations such as opening packs, showing duplicates, viewing the album, and restarting the collection process.
 
-The `BackupDuplicates` method of the `Album` class writes the duplicate stickers in the album to a file named "duplicates.txt". It iterates over the `album` map (which is not shown in the provided code but presumably maps sticker numbers to their counts in the album) and writes the sticker number and count to the file for each sticker that appears more than once in the album.
+How to Use
 
-The `BackupAlbum` method of the `Album` class writes the stickers in the album to a file named "album.txt". It iterates over the numbers from 1 to 25 and writes each number to the file if it appears in the `album` map. This suggests that there are 25 possible stickers that can be collected.
+Prerequisites
+	•	A C++ compiler (e.g., GCC).
+	•	Basic knowledge of command-line usage.
 
-Note that both `BackupDuplicates` and `BackupAlbum` methods check if the file can be opened successfully before attempting to write to it. If the file cannot be opened, an error message is printed to the standard error stream.
+Compilation
+
+To compile the program, run:
+
+g++ -o StickerAlbumSimulator main.cpp
+
+Running the Program
+
+Execute the compiled program:
+
+./StickerAlbumSimulator
+
+Program Flow
+	1.	If backup files (backup.txt, album.txt, duplicates.txt) are found, the program offers an option to load existing data.
+	2.	If no backup is found or the user declines to load it, the program initializes a new album.
+	3.	Users can interact with the program through a menu:
+	•	Open packs.
+	•	View album status.
+	•	Check duplicates and missing stickers.
+	•	Backup data and continue later.
+	4.	The program ends when the album is complete or the user chooses to exit.
+
+Files Generated
+	•	album.txt: Contains the stickers in the album.
+	•	duplicates.txt: Lists duplicate stickers and their counts.
+	•	backup.txt: Stores the program’s state for resumption.
+
+Program Menu Options
+	1.	Show Remaining Packs: Displays unopened packs.
+	2.	Open Pack: Opens a specified pack and adds its stickers to the album.
+	3.	Show Album: Displays collected stickers in the album.
+	4.	Show Duplicates: Lists stickers that are duplicates.
+	5.	Show Missing Stickers: Lists stickers not yet collected.
+	6.	Show Opened Packs: Displays packs that have been opened.
+	7.	Show Remaining Packs: Re-lists unopened packs.
+	8.	Terminate: Exits the program.
+	9.	Restart: Resets the album and packs to the initial state.
+
+Example Interaction
+
+Ingrese la cantidad de Albumes a producir: 1
+
+Opciones:
+1. Mostrar sobres disponibles.
+2. Abrir sobre.
+3. Mostrar Album.
+4. Mostrar cromos repetidos.
+5. Mostrar cromos faltantes.
+6. Mostrar sobres abiertos.
+7. Mostrar sobres disponibles.
+8. Terminar.
+9. Reiniciar.
+Seleccione una opcion: 2
+Ingrese el numero del sobre a abrir: 1
+Contenido del sobre 1: 5 12 8 3 19
+
+Future Enhancements
+	•	Add a graphical user interface (GUI) for better user experience.
+	•	Enable online multiplayer features to trade stickers with other users.
+	•	Support for custom album sizes and sticker designs.
+
+License
+
+This project is licensed under the MIT License.
+
+Enjoy completing your sticker albums! 🎉
